@@ -6,7 +6,8 @@ import model.Person
 
 fun main(args : Array<String>) {
 //    scopeFunctionsRun() // run { ... }
-    scopeFunctionsWith()
+//    scopeFunctionsWith()
+    scopeFunctionsApply()
 }
 
 val person = Person("이태훈", 29, mutableSetOf("TV보기", "프로그래밍", "낚시", "컴퓨터 게임"))
@@ -52,6 +53,55 @@ fun scopeFunctionsAlso() {
         .also { println("나이는? ${it.age}") } // 특정 메소드에 체이닝을 해주는 예
         .takeIf { it.age ==29 } // takeIf 라는 스코프 함수인데. 판단결과(Boolean) 에 따라서 null 혹은 자기자신(this)를 return 해줍니다.
     //  .something()
+}
+
+/**
+ * apply { ... } 리시버(<T>)로 주체를 암시적으로 전달합니다.
+ *
+ * 용도: 수신 객체 람다 내부에서 수신 객체의 함수를 사용하지 않고 수신 객체 자신을 다시 반환 하려는 경우에 apply 를 사용합니다.
+수신 객체 의 프로퍼티 만을 사용하는 대표적인 경우가 객체의 초기화 이며, 이곳에 apply 를 사용합니다.
+
+ * inline fun <T> T.apply(block: T.() -> Unit): T {
+        block()
+        return this
+    }
+ * @return 전달 받은 수신 객체
+ */
+fun scopeFunctionsApply() {
+
+    val resultApply = Person().apply {
+        name = "홍길동"
+        age = 29
+    }
+
+    println(resultApply)
+}
+
+/**
+ * let { ... } 리시버(<T>)로 주체를 암시적으로 전달합니다.
+ *
+ * 용도: 지정된 값이 null 이 아닌 경우에 코드를 실행해야 하는 경우.
+    Nullable 객체를 다른 Nullable 객체로 변환하는 경우.
+    단일 지역 변수의 범위를 제한 하는 경우.
+ *
+ * @return 코드 블록의 수행 결과
+ */
+fun scopeFunctionsLet() {
+    val notNullPerson = person
+
+    notNullPerson?.let {
+        println(it.name) // null이 아닐 때만 실행
+    }
+
+    null?.let {
+        println(" this is null ") // 실행 안됨
+    }
+
+    var nullablePerson: Person? = null
+    person.let {
+        nullablePerson = it
+    }
+
 }
 
 

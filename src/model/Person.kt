@@ -5,8 +5,8 @@ package model
  */
 
 data class Person (
-    var name: String,
-    var age: Int,
+    var name: String? = null,
+    var age: Int? = null,
     var hobbies: MutableSet<String> = HashSet()
 ) {
     fun toEntity() = this
