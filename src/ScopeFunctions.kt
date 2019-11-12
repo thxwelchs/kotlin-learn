@@ -5,9 +5,11 @@ import model.Person
  */
 
 fun main(args : Array<String>) {
-//    scopeFunctionsRun() // run { ... }
-//    scopeFunctionsWith()
+    scopeFunctionsWith()
+    scopeFunctionsAlso()
     scopeFunctionsApply()
+    scopeFunctionsLet()
+    scopeFunctionsRun()
 }
 
 val person = Person("이태훈", 29, mutableSetOf("TV보기", "프로그래밍", "낚시", "컴퓨터 게임"))
@@ -26,6 +28,8 @@ val person = Person("이태훈", 29, mutableSetOf("TV보기", "프로그래밍",
  * @return 람다를 실행한 결과 값
  */
 fun scopeFunctionsWith() {
+    println("--- with scope ---")
+
     val withResult = with(person) {
         println("${this.name}의 나이는 ${this.age}살 입니다.")
         println("${name}의 나이는 ${age}살 입니다.") // <- 이렇게 this를 생략할 수도 있다. 하지만 소스코드의 가독성을 위해 권장하지는 않음.
@@ -49,6 +53,8 @@ fun scopeFunctionsWith() {
  * @return 블록 내에 전달된 수신객체
  */
 fun scopeFunctionsAlso() {
+    println("--- also scope ---")
+
     person.toEntity()
         .also { println("나이는? ${it.age}") } // 특정 메소드에 체이닝을 해주는 예
         .takeIf { it.age ==29 } // takeIf 라는 스코프 함수인데. 판단결과(Boolean) 에 따라서 null 혹은 자기자신(this)를 return 해줍니다.
@@ -68,6 +74,7 @@ fun scopeFunctionsAlso() {
  * @return 전달 받은 수신 객체
  */
 fun scopeFunctionsApply() {
+    println("--- apply scope ---")
 
     val resultApply = Person().apply {
         name = "홍길동"
@@ -84,9 +91,11 @@ fun scopeFunctionsApply() {
     Nullable 객체를 다른 Nullable 객체로 변환하는 경우.
     단일 지역 변수의 범위를 제한 하는 경우.
  *
- * @return 코드 블록의 수행 결과
+ * @return 블록의 수행 결과
  */
 fun scopeFunctionsLet() {
+    println("--- let scope ---")
+
     val notNullPerson = person
 
     notNullPerson?.let {
@@ -106,18 +115,19 @@ fun scopeFunctionsLet() {
 
 
 /**
+ * run { ... } 리시버(<T>)로 주체를 암시적으로 전달합니다.
  *
+ * 용도: 어떤 값을 계산할 필요가 있거나 여러개의 지역 변수의 범위를 제한할 때 사용합니다.
+ *
+ * @return 블록의 수행 결과
  */
 fun scopeFunctionsRun() {
-    var person = Person("이태훈", 29, mutableSetOf("TV보기", "프로그래밍", "낚시", "컴퓨터 게임"))
+    println("--- run scope ---")
 
-    var whyRun = ""
-    println(whyRun)
+    person.run {
+        hobbies.add("음악듣기")
+        hobbies.add("유튜브 보기")
 
-    run {
-        whyRun = "asdf"
+        println("${name}의 취미는 몇개? ${hobbies.size}개")
     }
-
-    println(whyRun)
-    println(person)
 }
